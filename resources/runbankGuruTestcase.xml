@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite parallel="false" name="BANK GURU">
+
+
+	<!-- <test name="Run on firefox"> -->
+	<!-- <parameter name="browser" value="firefox" /> -->
+	<!-- <classes> -->
+	<!-- <class -->
+	<!-- name="com.bankguru.account.Account_Level06_MultiBrowser_ParallelTesting" 
+		/> -->
+	<!-- </classes> -->
+	<!-- </test> -->
+
+	<test name="Run on chrome">
+		<parameter name="browser" value="chrome" />
+
+		<classes>
+		<class name="com.bankguru.customer.Step04_EditCustomer" />
+		</classes>
+	</test>
+
+	<!-- <test name="Run on chromeHeadless"> -->
+	<!-- <parameter name="browser" value ="chromeheadless"/> -->
+	<!-- <classes> -->
+	<!-- <class name="com.bankguru.account.Account_Level06_MultiBrowser_ParallelTesting" 
+		/> -->
+	<!-- </classes> -->
+	<!-- </test> -->
+</suite>
