@@ -2,6 +2,7 @@ package commons;
 
 import org.openqa.selenium.WebDriver;
 
+import pageObject.DeleteCustomerPageObject;
 import pageObject.EditCustomerPageObject;
 import pageObject.HomePageObject;
 import pageObject.LoginPageObject;
@@ -27,5 +28,9 @@ public class PageFactoryManage {
 
 	public static EditCustomerPageObject getEditCustomerPage(WebDriver driver) {
 		return new EditCustomerPageObject(driver);
+	}
+
+	public static DeleteCustomerPageObject getDeleteCustomerPage(WebDriver driver) {
+		return new DeleteCustomerPageObject(driver);
 	}
 }

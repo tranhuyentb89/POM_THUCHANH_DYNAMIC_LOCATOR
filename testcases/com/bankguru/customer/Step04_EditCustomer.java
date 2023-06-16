@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import commons.AbstractTest;
 import commons.PageFactoryManage;
+import pageObject.DeleteCustomerPageObject;
 import pageObject.EditCustomerPageObject;
 import pageObject.HomePageObject;
 import pageObject.LoginPageObject;
@@ -19,7 +20,7 @@ import pageObject.RegisterPageObject;
 
 public class Step04_EditCustomer extends AbstractTest {
 	WebDriver driver;
-	String emailInput, customerName, dob, address, city, state, pin, mobile, password, customerID;
+	String emailInput, customerName, dob, address, city, state, pin, mobile, password, customerID1;
 	String loginPageUrl;
 	String userInfor = "mngr508199";
 	String passInfor = "hejAjAm";
@@ -28,6 +29,7 @@ public class Step04_EditCustomer extends AbstractTest {
 	HomePageObject homePage;
 	NewCustomerPageObject newCustomerPage;
 	EditCustomerPageObject editCustomerPage;
+	DeleteCustomerPageObject deleteCustomerPage;
 	@Parameters("browser")
 	@BeforeTest
 	public void beforeTest(String browserName) {
@@ -42,7 +44,6 @@ public class Step04_EditCustomer extends AbstractTest {
 		pin = "000000";
 		mobile = "098727839";
 		password = "12345678";
-
 	}
 
 	@Test
@@ -59,6 +60,12 @@ public class Step04_EditCustomer extends AbstractTest {
 	
 	@Test
 	public void TC_02_CreateNewCustomer() {
+		CreateNewCustomer();
+		Assert.assertTrue(newCustomerPage.isCustomerRegisterSuccessDisplayed());
+		customerID1 = newCustomerPage.getTextOfSuccessFormCreateNewCus("Customer ID");
+	}
+	
+	public void CreateNewCustomer() {
 		homePage.openMultiplePage(driver, "New Customer");
 		newCustomerPage = PageFactoryManage.getNewCustomerPage(driver);
 		newCustomerPage.inputToDynamicTextbox(driver, customerName, "name");
@@ -71,10 +78,7 @@ public class Step04_EditCustomer extends AbstractTest {
 		newCustomerPage.inputToDynamicTextbox(driver, emailInput, "emailid");
 		newCustomerPage.inputToDynamicTextbox(driver, password, "password");
 		newCustomerPage.clickToSubmitButton(driver,"sub");
-		Assert.assertTrue(newCustomerPage.isCustomerRegisterSuccessDisplayed());
-		customerID = newCustomerPage.getTextOfSuccessFormCreateNewCus("Customer ID");
 	}
-	
 	@Test
 	public void TC_03_EditCustomerWithBlank() {
 		newCustomerPage.openMultiplePage(driver, "Edit Customer");
@@ -99,10 +103,88 @@ public class Step04_EditCustomer extends AbstractTest {
 		editCustomerPage.inputToDynamicTextbox(driver, randomNumber()+"", "cusid");
 		editCustomerPage.clickToSubmitButton(driver, "AccSubmit");
 		Assert.assertEquals("Customer does not exist!!", editCustomerPage.getTextInAlert(driver));
+		editCustomerPage.acceptAlert(driver);
 	}
 
+	@Test
+	public void TC_05_EnterCusIDNotBelongToUser() {
+		newCustomerPage.openMultiplePage(driver, "Edit Customer");
+		editCustomerPage = PageFactoryManage.getEditCustomerPage(driver);
+		editCustomerPage.inputToDynamicTextbox(driver, pin, "cusid");
+		editCustomerPage.clickToSubmitButton(driver, "AccSubmit");
+		Assert.assertEquals("You are not authorize to edit this customer!!", editCustomerPage.getTextInAlert(driver));
+		editCustomerPage.acceptAlert(driver);
+	}
+	
+	@Test
+	public void TC_06_EnterValidCustomerID() {
+		newCustomerPage.openMultiplePage(driver, "Edit Customer");
+		editCustomerPage = PageFactoryManage.getEditCustomerPage(driver);
+		editCustomerPage.inputToDynamicTextbox(driver, customerID1, "cusid");
+		editCustomerPage.clickToSubmitButton(driver, "AccSubmit");
+		Assert.assertTrue(editCustomerPage.isTitleFormDisplayed(driver, "Edit Customer"));
+	}
+	
+	
+	@Test
+	public void TC_07_NoChangeWhenEditCustomer() {
+		editCustomerPage.clickToSubmitButton(driver, "sub");
+		Assert.assertEquals("No Changes made to Customer records", editCustomerPage.getTextInAlert(driver));
+		editCustomerPage.acceptAlert(driver);
+	}
+	
+	@Test
+	public void TC_08_DeleteCustomer_CusIDnotBeBlank() {
+		editCustomerPage.openMultiplePage(driver, "Delete Customer");
+		deleteCustomerPage = PageFactoryManage.getDeleteCustomerPage(driver);
+		deleteCustomerPage.sendKeyTabToTextBox(driver, "cusid");
+		Assert.assertTrue(deleteCustomerPage.isErrMsgTextboxDisplayed(driver, "Customer ID is required"));
+	}
+	
+	@Test
+	public void TC_09_DeleteCustomer_CusIDnotHaveFirstSpace() {
+		editCustomerPage.openMultiplePage(driver, "Delete Customer");
+		deleteCustomerPage = PageFactoryManage.getDeleteCustomerPage(driver);
+		deleteCustomerPage.sendSpaceToTextbox(driver, "cusid");
+		Assert.assertTrue(deleteCustomerPage.isErrMsgTextboxDisplayed(driver, "First character can not have space"));
+	}
+	
+	@Test
+	public void TC_10_DeleteCustomer_CusIDnotExist() {
+		editCustomerPage.openMultiplePage(driver, "Delete Customer");
+		deleteCustomerPage = PageFactoryManage.getDeleteCustomerPage(driver);
+		deleteCustomerPage.inputToDynamicTextbox(driver, mobile , "cusid" );
+		deleteCustomerPage.clickToSubmitButton(driver, "AccSubmit");
+		Assert.assertEquals("Do you really want to delete this Customer?", deleteCustomerPage.getTextInAlert(driver));
+		deleteCustomerPage.acceptAlert(driver);
+		Assert.assertEquals("Customer does not exist!!", deleteCustomerPage.getTextInAlert(driver));
+		deleteCustomerPage.acceptAlert(driver);
+	}
 
+	@Test
+	public void TC_11_DeleteCustomer_CusIDNotBelongToUser() {
+		editCustomerPage.openMultiplePage(driver, "Delete Customer");
+		deleteCustomerPage = PageFactoryManage.getDeleteCustomerPage(driver);
+		deleteCustomerPage.inputToDynamicTextbox(driver, pin +"", "cusid" );
+		deleteCustomerPage.clickToSubmitButton(driver, "AccSubmit");
+		Assert.assertEquals("Do you really want to delete this Customer?", deleteCustomerPage.getTextInAlert(driver));
+		deleteCustomerPage.acceptAlert(driver);
+		Assert.assertEquals("You are not authorize to delete this customer!!", deleteCustomerPage.getTextInAlert(driver));
+		deleteCustomerPage.acceptAlert(driver);
+	}
+	
+	@Test
+	public void TC_11_DeleteCustomer_Success() {
+		CreateNewCustomer();
+		customerID1 = newCustomerPage.getTextOfSuccessFormCreateNewCus("Customer ID");
+		editCustomerPage.openMultiplePage(driver, "Delete Customer");
+		deleteCustomerPage = PageFactoryManage.getDeleteCustomerPage(driver);
+		deleteCustomerPage.inputToDynamicTextbox(driver, randomNumber()+"", "cusid" );
+		Assert.assertEquals("Do you really want to delete this Customer?", deleteCustomerPage.getTextInAlert(driver));
+		deleteCustomerPage.acceptAlert(driver);
 
+	}
+	
 	public int randomNumber() {
 		Random random = new Random();
 		return random.nextInt(999999);
