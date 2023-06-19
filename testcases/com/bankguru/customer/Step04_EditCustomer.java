@@ -20,7 +20,7 @@ import pageObject.RegisterPageObject;
 
 public class Step04_EditCustomer extends AbstractTest {
 	WebDriver driver;
-	String emailInput, customerName, dob, address, city, state, pin, mobile, password, customerID1;
+	String emailInput, customerName, dob, address, city, state, pin, mobile, password, customerID1, customerID2;
 	String loginPageUrl;
 	String userInfor = "mngr508199";
 	String passInfor = "hejAjAm";
@@ -60,9 +60,20 @@ public class Step04_EditCustomer extends AbstractTest {
 	
 	@Test
 	public void TC_02_CreateNewCustomer() {
-		CreateNewCustomer();
+		homePage.openMultiplePage(driver, "New Customer");
+		newCustomerPage = PageFactoryManage.getNewCustomerPage(driver);
+		newCustomerPage.inputToDynamicTextbox(driver, customerName, "name");
+		newCustomerPage.inputToDynamicTextbox(driver, dob, "dob");
+		newCustomerPage.inputToAddressbox(address);
+		newCustomerPage.inputToDynamicTextbox(driver, city, "city");
+		newCustomerPage.inputToDynamicTextbox(driver, state, "state");
+		newCustomerPage.inputToDynamicTextbox(driver, pin, "pinno");
+		newCustomerPage.inputToDynamicTextbox(driver, mobile, "telephoneno");
+		newCustomerPage.inputToDynamicTextbox(driver, emailInput, "emailid");
+		newCustomerPage.inputToDynamicTextbox(driver, password, "password");
+		newCustomerPage.clickToSubmitButton(driver,"sub");
 		Assert.assertTrue(newCustomerPage.isCustomerRegisterSuccessDisplayed());
-		customerID1 = newCustomerPage.getTextOfSuccessFormCreateNewCus("Customer ID");
+		customerID1 = newCustomerPage.getTextOfSuccessFormCreateNewCus(driver,"Customer ID");
 	}
 	
 	public void CreateNewCustomer() {
@@ -75,7 +86,7 @@ public class Step04_EditCustomer extends AbstractTest {
 		newCustomerPage.inputToDynamicTextbox(driver, state, "state");
 		newCustomerPage.inputToDynamicTextbox(driver, pin, "pinno");
 		newCustomerPage.inputToDynamicTextbox(driver, mobile, "telephoneno");
-		newCustomerPage.inputToDynamicTextbox(driver, emailInput, "emailid");
+		newCustomerPage.inputToDynamicTextbox(driver, "t"+emailInput, "emailid");
 		newCustomerPage.inputToDynamicTextbox(driver, password, "password");
 		newCustomerPage.clickToSubmitButton(driver,"sub");
 	}
@@ -174,12 +185,14 @@ public class Step04_EditCustomer extends AbstractTest {
 	}
 	
 	@Test
-	public void TC_11_DeleteCustomer_Success() {
+	public void TC_12_DeleteCustomer_Success() throws Exception {
 		CreateNewCustomer();
-		customerID1 = newCustomerPage.getTextOfSuccessFormCreateNewCus("Customer ID");
+		customerID2 = newCustomerPage.getTextOfSuccessFormCreateNewCus(driver, "Customer ID");
 		editCustomerPage.openMultiplePage(driver, "Delete Customer");
 		deleteCustomerPage = PageFactoryManage.getDeleteCustomerPage(driver);
-		deleteCustomerPage.inputToDynamicTextbox(driver, randomNumber()+"", "cusid" );
+		deleteCustomerPage.inputToDynamicTextbox(driver, customerID2, "cusid" );
+		deleteCustomerPage.clickToSubmitButton(driver, "AccSubmit");
+		Thread.sleep(5000);
 		Assert.assertEquals("Do you really want to delete this Customer?", deleteCustomerPage.getTextInAlert(driver));
 		deleteCustomerPage.acceptAlert(driver);
 

@@ -356,5 +356,9 @@ public class AbstractPages {
 		clickToElement(driver, AbstractPageUI.DYNAMIC_TEXTBOX_AND_SUBMIT_BUTTON, string);
 	}
 
+	public String getTextOfSuccessFormCreateNewCus(WebDriver driver, String coloumnName) {
+		return getTextOfElement(driver, AbstractPageUI.DYNAMIC_TEXT_IN_TABLE_AFTER_SUCCESS, coloumnName);
+	}
+
 
 }

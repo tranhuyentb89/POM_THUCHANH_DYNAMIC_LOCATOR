@@ -244,13 +244,13 @@ public class Step03_NewCustomer extends AbstractTest {
 		newCustomerPage.inputToDynamicTextbox(driver, emailInput, "emailid");
 		newCustomerPage.inputToDynamicTextbox(driver, password, "password");
 		Assert.assertTrue(newCustomerPage.isCustomerRegisterSuccessDisplayed());
-		customerID = newCustomerPage.getTextOfSuccessFormCreateNewCus("Customer ID");
-		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus("Address"));
-		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus("City"));
-		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus("State"));
-		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus("Pin"));
-		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus("Mobile No."));
-		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus("Email"));
+		customerID = newCustomerPage.getTextOfSuccessFormCreateNewCus(driver, "Customer ID");
+		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus(driver, "Address"));
+		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus(driver,"City"));
+		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus(driver,"State"));
+		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus(driver,"Pin"));
+		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus(driver,"Mobile No."));
+		Assert.assertEquals(customerName, newCustomerPage.getTextOfSuccessFormCreateNewCus(driver,"Email"));
 	}
 
 	public int randomNumber() {

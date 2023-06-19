@@ -6,6 +6,7 @@ import pageObject.DeleteCustomerPageObject;
 import pageObject.EditCustomerPageObject;
 import pageObject.HomePageObject;
 import pageObject.LoginPageObject;
+import pageObject.NewAccountPageObject;
 import pageObject.NewCustomerPageObject;
 import pageObject.RegisterPageObject;
 
@@ -32,5 +33,9 @@ public class PageFactoryManage {
 
 	public static DeleteCustomerPageObject getDeleteCustomerPage(WebDriver driver) {
 		return new DeleteCustomerPageObject(driver);
+	}
+
+	public static NewAccountPageObject getNewAccountPage(WebDriver driver) {
+		return new NewAccountPageObject(driver);
 	}
 }

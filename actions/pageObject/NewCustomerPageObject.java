@@ -27,8 +27,5 @@ public class NewCustomerPageObject extends AbstractPages{
 	public boolean isCustomerRegisterSuccessDisplayed() {
 		return isControlDisplayed(driver, NewCustomerPageUI.REGIS_SUCCESS_MSG);
 	}
-	public String getTextOfSuccessFormCreateNewCus(String coloumnName) {
-		return getTextOfElement(driver, AbstractPageUI.DYNAMIC_REGISTER_CUSTOMER_SUCCESS, coloumnName);
-	}
 
 }

@@ -15,7 +15,7 @@
 		<parameter name="browser" value="chrome" />
 
 		<classes>
-		<class name="com.bankguru.customer.Step04_EditCustomer" />
+		<class name="com.bankguru.customer.Step05_Account" />
 		</classes>
 	</test>
 
